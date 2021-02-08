@@ -25,4 +25,4 @@ Configure environment variables
 
 Run a specific script
 
-- Batch Airdrop: `node src/bulk-airdrop.js`
+- Send Airdrop / Redpacket in batch: `node src/bulk-airdrop.js`
