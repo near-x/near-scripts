@@ -1,2 +1,3 @@
-# near-script
-commonly used NEAR scripts via near-api-js
+# NEAR Scripts
+
+Commonly used NEAR scripts via near-api-js
