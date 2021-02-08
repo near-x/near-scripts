@@ -1,0 +1,28 @@
+{
+  "name": "near-scripts",
+  "version": "0.1.0",
+  "description": "Commonly used NEAR scripts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/near-x/near-scripts.git"
+  },
+  "keywords": [
+    "near",
+    "script",
+    "javascript",
+    "blockchain"
+  ],
+  "author": "think-in-universe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/near-x/near-scripts/issues"
+  },
+  "homepage": "https://github.com/near-x/near-scripts#readme",
+  "dependencies": {
+    "near-api-js": "^0.36.3"
+  }
+}
