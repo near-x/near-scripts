@@ -12,13 +12,13 @@ Clone project and install dependencies
 
 ## Configure
 
-Create Symbolic Link for Crendentials
+Create symbolic link for NEAR crendentials
 
 `ln -s ~/.near-credentials/ .near-credentials`
 
 ## Run Scripts
 
-Configure Environment Variables
+Configure environment variables
 
 1. `export NEAR_ENV=testnet`
 2. `export NEAR_ACCOUNT=<your account>`
