@@ -6,9 +6,9 @@ Commonly used NEAR scripts built with [near-api-js](https://docs.near.org/docs/d
 
 Clone project and install dependencies
 
-`git clone https://github.com/near-x/near-scripts`
-`cd near-scripts`
-`yarn`
+1. `git clone https://github.com/near-x/near-scripts`
+2. `cd near-scripts`
+3. `yarn`
 
 ## Configure
 
