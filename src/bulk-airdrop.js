@@ -25,6 +25,8 @@ async function getAccount(accountId) {
   return await client.account(accountId);
 }
 
+// ref: the script by @picturepan2: https://gist.github.com/picturepan2/9f902cad51dd2c2e0f173160ef5302ce
+
 async function createLinkdrops(number, amount) {
   const account = await getAccount(process.env.NEAR_ACCOUNT);
   const rootAccount = process.env.NEAR_ENV === "mainnet" ? "near" : "testnet";
