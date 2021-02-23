@@ -26,3 +26,4 @@ Configure environment variables
 Run a specific script
 
 - Send Airdrop / Redpacket in batch: `node src/bulk-airdrop.js`
+- Transfer NEAT to a specific account: `node src/transfer.js`
