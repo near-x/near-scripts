@@ -1,31 +1,10 @@
 const nearAPI = require("near-api-js");
-const getConfig = require("./config");
+const { getAccount } = require("./account");
 
 const BOATLOAD_OF_GAS = '100000000000000'
 const getWalletLink = (env, keyPair) => {
   const host = env === 'testnet' ? 'http://wallet.testnet.near.org/create/testnet' : 'https://redpacket.near.org';
   return `${host}/${keyPair.secretKey}`;
-}
-
-function getKeyStore() {
-  // Directory where Near credentials are going to be stored
-  const credentialsPath = "./.near-credentials";
-
-  // Configure the keyStore to be used with the SDK
-  const UnencryptedFileSystemKeyStore = nearAPI.keyStores.UnencryptedFileSystemKeyStore;
-  return new UnencryptedFileSystemKeyStore(credentialsPath);
-}
-
-async function getAccount(accountId) {
-  const keyStore = getKeyStore();
-  const env = process.env.NEAR_ENV || "testnet";
-  const opitons = getConfig(env);
-  opitons.accountId = accountId
-  opitons.deps = {
-    keyStore
-  }
-  const client = await nearAPI.connect(opitons);
-  return await client.account(accountId);
 }
 
 // ref: the script by @picturepan2: https://gist.github.com/picturepan2/9f902cad51dd2c2e0f173160ef5302ce
