@@ -1,5 +1,5 @@
 const nearAPI = require("near-api-js");
-const { getAccount, getContract, accountExists } = require("./utils/near");
+const { getAccount, getContract, isValidAccount } = require("./utils/near");
 const { BN } = require('bn.js');
 
 const CONTRACT_NAME = process.env.NEAR_ENV === 'mainnet'
@@ -52,12 +52,12 @@ const writeCSV = async (filename, data) => {
       ]
     });
     await csvWriter.writeRecords(data);
-    console.log('The CSV file was written successfully')
+    // console.log('The CSV file was written successfully')
 }
 
 const parseAccounts = (accounts) => {
   return accounts.map(a => ({
-    account: a.account.toLowerCase(),
+    account: a.account.toLowerCase().replace(/^http(s):.*\//, ''),
     amount: parseFloat(a.amount.replace(',', '.').replace(' ', ''))
   }));
 }
@@ -68,7 +68,7 @@ const filterAccounts = async (accounts, filename) => {
   const chunkSize = CHUNK_SIZE;
   for (let i = 0; i < accounts.length; i += chunkSize) {
     const chunk = accounts.slice(i, i + chunkSize);
-    const exists = await Promise.all(chunk.map(a => accountExists(a.account)));
+    const exists = await Promise.all(chunk.map(a => isValidAccount(a.account)));
     valid = valid.concat(chunk.filter((a, i) => exists[i]));
     invalid = invalid.concat(chunk.filter((a, i) => !exists[i]))
   }
@@ -122,7 +122,7 @@ async function bulkTransfer(filename) {
     console.log(`Bulk transferred to ${chunk.length} accounts`);
     await sleep(500);
   }
-  console.log(`Bulk transfer Ⓝ successfully to ${accounts.length} accounts`);
+  console.log(`Bulk transfer Ⓝ successfully to ${validAccounts.length} accounts`);
 }
 
 /*

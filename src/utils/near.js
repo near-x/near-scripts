@@ -32,10 +32,14 @@ function getContract(account, contractName, methods) {
 	return new nearAPI.Contract(account, contractName, { ...methods });
 }
 
-async function accountExists(accountId) {
+async function isValidAccount(accountId) {
   if (accountId.length === 44) {
     let key = new PublicKey({keyType: KeyType.ED25519, data: Buffer.from(accountId, 'hex')});
     return !!(key.toString())
+  }
+
+  if (!accountId.toLowerCase().endsWith(".near")) {
+    return false;
   }
 
   try {
@@ -51,5 +55,5 @@ async function accountExists(accountId) {
 module.exports = {
   getAccount,
   getContract,
-  accountExists
+  isValidAccount
 }
