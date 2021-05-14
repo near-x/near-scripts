@@ -3,7 +3,8 @@ const getConfig = require("./config");
 
 function getKeyStore() {
   // Directory where Near credentials are going to be stored
-  const credentialsPath = "./.near-credentials";
+  // const credentialsPath = "./.near-credentials";
+  const credentialsPath = process.env.HOME + "/.near-credentials/";
 
   // Configure the keyStore to be used with the SDK
   const UnencryptedFileSystemKeyStore = nearAPI.keyStores.UnencryptedFileSystemKeyStore;

@@ -3,7 +3,7 @@ const { getAccount } = require("./account");
 
 const BOATLOAD_OF_GAS = '100000000000000'
 const getWalletLink = (env, keyPair) => {
-  const host = env === 'testnet' ? 'http://wallet.testnet.near.org/create/testnet' : 'https://redpacket.near.org';
+  const host = env === 'mainnet' ? 'https://redpacket.near.org' : 'http://wallet.testnet.near.org/create/testnet';
   return `${host}/${keyPair.secretKey}`;
 }
 

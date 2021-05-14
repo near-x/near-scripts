@@ -10,11 +10,11 @@ Clone project and install dependencies
 2. `cd near-scripts`
 3. `yarn`
 
-## Configure
+## Login
 
-Create symbolic link for NEAR crendentials
+Login with [`near-cli`](https://docs.near.org/docs/tools/near-cli).
 
-`ln -s ~/.near-credentials/ .near-credentials`
+`near login`
 
 ## Run Scripts
 
@@ -26,4 +26,5 @@ Configure environment variables
 Run a specific script
 
 - Send Airdrop / Redpacket in batch: `node src/bulk-airdrop.js`
-- Transfer NEAT to a specific account: `node src/transfer.js`
+- Transfer NEAR to a specific account: `node src/transfer.js`
+- Transfer tokens in batch: `node src/bulk-transfer.js`
