@@ -27,4 +27,4 @@ Run a specific script
 
 - Send Airdrop / Redpacket in batch: `node src/bulk-airdrop.js`
 - Transfer NEAR to a specific account: `node src/transfer.js`
-- Transfer tokens in batch: `node src/bulk-transfer.js`
+- Distribute NEAR tokens in batch: `node src/bulk-transfer.js`

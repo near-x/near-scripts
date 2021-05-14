@@ -1,5 +1,5 @@
 const nearAPI = require("near-api-js");
-const { getAccount } = require("./account");
+const { getAccount } = require("./utils/near");
 
 async function transfer(receiver, amount) {
   const sender = await getAccount(process.env.NEAR_ACCOUNT);

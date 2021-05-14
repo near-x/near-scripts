@@ -1,5 +1,5 @@
 const nearAPI = require("near-api-js");
-const { getAccount } = require("./account");
+const { getAccount } = require("./utils/near");
 
 const BOATLOAD_OF_GAS = '100000000000000'
 const getWalletLink = (env, keyPair) => {
