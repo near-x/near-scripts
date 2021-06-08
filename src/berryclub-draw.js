@@ -43,7 +43,7 @@ const readLines = async (contract, lines) => {
   return result;
 }
 
-async function drawPixels() {
+async function drawPixels(number = 1) {
   const accountId = process.env.NEAR_ACCOUNT;
   const sender = await getAccount(accountId);
   const contract = getBerryClubContract(sender);
@@ -54,14 +54,16 @@ async function drawPixels() {
 
   // change the color at top-left corner
   const newColor = topLeftCorner === 0 ? 16777215 : 0;
+  const pixels = [];
+  for (let i = 0; i < number; i++) {
+    pixels.push({
+      x: 0,
+      y: i,
+      color: newColor
+    });
+  }
   await contract.draw({
-    pixels: [
-      {
-        x: 0,
-        y: 0,
-        color: newColor
-      }
-    ]
+    pixels
   }, new BN("75000000000000"));
 
   // fetch the latest color
