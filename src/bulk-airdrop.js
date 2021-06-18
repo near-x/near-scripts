@@ -1,9 +1,11 @@
 const nearAPI = require("near-api-js");
 const { getAccount } = require("./utils/near");
 
+const FUND_ACCOUNT = process.env.NEAR_ENV === "mainnet" ? "near" : "testnet";
+
 const BOATLOAD_OF_GAS = '100000000000000'
-const getWalletLink = (env, keyPair) => {
-  const host = env === 'mainnet' ? 'https://redpacket.near.org' : 'http://wallet.testnet.near.org/create/testnet';
+const getWalletLink = (keyPair) => {
+  const host = process.env.NEAR_ENV === 'mainnet' ? 'https://redpacket.near.org' : `https://wallet.testnet.near.org/create/${FUND_ACCOUNT}`;
   return `${host}/${keyPair.secretKey}`;
 }
 
@@ -11,13 +13,11 @@ const getWalletLink = (env, keyPair) => {
 
 async function createLinkdrops(number, amount) {
   const account = await getAccount(process.env.NEAR_ACCOUNT);
-  const env = process.env.NEAR_ENV;
-  const rootAccount = env === "mainnet" ? "near" : "testnet";
   const parsedAmount = nearAPI.utils.format.parseNearAmount(amount.toString())
   for (let i = 0; i < number; i++) {
     const keyPair = nearAPI.KeyPair.fromRandom('ed25519');
-    console.log(getWalletLink(env, keyPair));
-    await account.functionCall(rootAccount, 'send', { public_key: keyPair.publicKey.toString() }, BOATLOAD_OF_GAS, parsedAmount);
+    console.log(getWalletLink(keyPair));
+    await account.functionCall(FUND_ACCOUNT, 'send', { public_key: keyPair.publicKey.toString() }, BOATLOAD_OF_GAS, parsedAmount);
   }
 }
 
