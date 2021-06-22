@@ -106,3 +106,4 @@ dist
 # Near credentials
 .near-credentials
 tmp/
+.DS_Store

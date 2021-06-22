@@ -57,7 +57,7 @@ const writeCSV = async (filename, data) => {
 
 const parseAccounts = (accounts) => {
   return accounts.map(a => ({
-    account: a.account.toLowerCase().replace(/^http(s):.*\//, '').replace(/^@/, ''),
+    account: a.account.toLowerCase().replace(/^http(s):.*\//, '').replace(/^@/, '').trim(),
     amount: parseFloat(a.amount.replace(',', '.').replace(' ', ''))
   }));
 }
