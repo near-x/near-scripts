@@ -48,7 +48,11 @@ async function isValidAccount(accountId) {
     await account.state();
     return true;
   } catch (error) {
-      return false;
+      const msg = error.toString();
+      if (msg.includes('does not exist while viewing')) {
+        return false;
+      }
+      throw error;
   }
 }
 

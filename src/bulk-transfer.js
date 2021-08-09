@@ -1,10 +1,13 @@
 const nearAPI = require("near-api-js");
 const { getAccount, getContract, isValidAccount } = require("./utils/near");
 const { BN } = require('bn.js');
+const readline = require('readline');
 
 const CONTRACT_NAME = process.env.NEAR_ENV === 'mainnet'
   ? 'multisender.app.near'
   : 'dev-1609348608630-8665489';
+
+const ACCOUNT_NAME = process.env.NEAR_ACCOUNT;
 
 const DEFAULT_GAS = 300000000000000;
 const FRAC_DIGITS = 5;
@@ -37,6 +40,7 @@ const readCSV = async (filename) => {
     })
     .on('end', () => {
         console.log('CSV file successfully processed');
+        console.log(`Total # of accounts from CSV: ${table.length}`);
         resolve(table);
     });
   })
@@ -57,7 +61,7 @@ const writeCSV = async (filename, data) => {
 
 const parseAccounts = (accounts) => {
   return accounts.map(a => ({
-    account: a.account.toLowerCase().replace(/^http(s):.*\//, '').replace(/^@/, '').trim(),
+    account: a.account.toLowerCase().replace(' ', '').replace(/^http(s):.*\//, '').replace(/^@/, '').trim(),
     amount: parseFloat(a.amount.replace(',', '.').replace(' ', ''))
   }));
 }
@@ -74,8 +78,8 @@ const filterAccounts = async (accounts, filename) => {
   }
   console.log('# of valid accounts', valid.length);
   if (filename) {
-    await writeCSV(filename.replace(".csv", "_valid.csv"), valid);
-    await writeCSV(filename.replace(".csv", "_invalid.csv"), invalid);
+    await writeCSV(filename.replace(".csv", "_valid.tmp.csv"), valid);
+    await writeCSV(filename.replace(".csv", "_invalid.tmp.csv"), invalid);
   }
   return valid;
 }
@@ -94,9 +98,23 @@ async function bulkTransfer(filename) {
   const total = validAccounts.reduce((sum, a) => sum + a.amount, 0);
   console.log(`Total distribution: ${total} Ⓝ`);
 
-  const accountId = process.env.NEAR_ACCOUNT;
+  const accountId = ACCOUNT_NAME;
   const sender = await getAccount(accountId);
   const contract = getMultiSenderContract(sender);
+
+  console.log(`Using account ${accountId}`);
+
+  // double confirm
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  await new Promise((res) => {
+    rl.question('Kick off bulk transfer?', () => {
+      rl.close();
+      res();
+    });
+  });
 
   const accountDeposit = await contract.get_deposit({
     account_id: accountId
@@ -104,7 +122,7 @@ async function bulkTransfer(filename) {
   const deposit = nearAPI.utils.format.formatNearAmount(accountDeposit, FRAC_DIGITS).replace(",", "");
   const to_deposit = convertToYoctoNear(total - deposit);
   if (to_deposit > 0) {
-    console.log(`Wiil deposit ${to_deposit} yocto Ⓝ`);
+    console.log(`Will deposit ${to_deposit} yocto Ⓝ`);
     await contract.deposit({}, DEFAULT_GAS, to_deposit);
   } else {
     console.log(`Have sufficient App Balance ${deposit} Ⓝ to cover deposit ${total} Ⓝ`);
@@ -126,8 +144,9 @@ async function bulkTransfer(filename) {
 }
 
 /*
+Usage: node src/bulk-transfer.js <path/to/accounts.csv>
 
-The CSV file format should be:
+The accounts.csv file format should be:
 
 account,amount
 "alice.testnet",0.001
@@ -137,5 +156,16 @@ account,amount
 "edward.testnet",0.001
 
 */
+const csvFilePath = process.argv[2];
 
-bulkTransfer("./tmp/mutil-send-accounts.csv").catch(console.error);
+if (!csvFilePath) {
+  console.error('Bad arguments');
+  console.error('Usage: node src/bulk-transfer.js <path/to/accounts.csv>');
+  process.exit(1);
+}
+if (!ACCOUNT_NAME) {
+  console.error('Missing NEAR_ACCOUNT environ');
+  process.exit(2);
+}
+
+bulkTransfer(csvFilePath).catch(console.error);
