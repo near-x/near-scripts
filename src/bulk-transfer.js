@@ -7,7 +7,7 @@ const CONTRACT_NAME = process.env.NEAR_ENV === 'mainnet'
   ? 'multisender.app.near'
   : 'dev-1609348608630-8665489';
 
-const ACCOUNT_NAME = process.env.NEAR_ACCOUNT || 'events.near';
+const ACCOUNT_NAME = process.env.NEAR_ACCOUNT;
 
 const DEFAULT_GAS = 300000000000000;
 const FRAC_DIGITS = 5;
@@ -162,6 +162,10 @@ if (!csvFilePath) {
   console.error('Bad arguments');
   console.error('Usage: node src/bulk-transfer.js <path/to/accounts.csv>');
   process.exit(1);
+}
+if (!ACCOUNT_NAME) {
+  console.error('Missing NEAR_ACCOUNT environ');
+  process.exit(2);
 }
 
 bulkTransfer(csvFilePath).catch(console.error);
