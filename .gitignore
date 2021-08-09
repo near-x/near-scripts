@@ -107,3 +107,6 @@ dist
 .near-credentials
 tmp/
 .DS_Store
+
+# Data files
+*.csv
