@@ -12,7 +12,7 @@ module.exports = function getConfig(env) {
     case 'testnet':
         return {
             networkId: 'default',
-            nodeUrl: 'https://rpc.testnet.near.org',
+            nodeUrl: process.env.NEAR_CLI_TESTNET_RPC_SERVER_URL || 'https://rpc.testnet.near.org',
             walletUrl: 'https://wallet.testnet.near.org',
             helperUrl: 'https://helper.testnet.near.org',
             masterAccount: 'test.near',
